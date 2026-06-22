@@ -36,6 +36,8 @@ if [ -n "$private_url" ]; then
     git remote add origin "$private_url"
   fi
   echo "→ origin (votre dépôt privé) : $private_url"
+elif git remote get-url origin >/dev/null 2>&1; then
+  echo "ℹ origin déjà configuré : $(git remote get-url origin)"
 else
   echo "ℹ Aucune URL privée fournie. Ajoutez-la plus tard avec :"
   echo "      git remote add origin <url-de-votre-depot-prive>"
