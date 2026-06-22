@@ -54,7 +54,7 @@ git config pull.rebase false
 if [ -e information/profil.md ]; then
   echo "ℹ information/profil.md existe déjà — laissé intact."
 else
-  cp information/profil.example.md information/profil.md
+  mv information/profil.example.md information/profil.md
   echo "→ information/profil.md créé depuis l'exemple."
 fi
 
