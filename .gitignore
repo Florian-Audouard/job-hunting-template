@@ -1,8 +1,6 @@
 # Données personnelles — NE JAMAIS committer.
 # Copiez information/profil.example.md -> information/profil.md et remplissez-le.
 # Ajoutez votre photo en information/images.jpeg.
-information/*
-!information/profil.example.md
 
 # Candidatures (contiennent vos données + l'offre) — restent locales.
 candidatures/
