@@ -28,6 +28,11 @@ else
   exit 1
 fi
 
+# 1b) Garde-fou : interdire tout push vers le template (upstream est en
+#     lecture seule, on n'y tire que les mises à jour via ./update.sh).
+git remote set-url --push upstream DISABLE 2>/dev/null || true
+echo "→ push vers le template désactivé (upstream est en lecture seule)"
+
 # 2) Votre dépôt privé -> origin.
 if [ -n "$private_url" ]; then
   if git remote get-url origin >/dev/null 2>&1; then
@@ -49,6 +54,17 @@ if [ "$(git branch --show-current)" = "master" ]; then
   echo "→ branche renommée : master -> main"
 fi
 git config pull.rebase false
+
+# 3b) Re-cibler le suivi de la branche courante vers votre dépôt privé.
+#     Sinon, après le renommage origin -> upstream, git fait suivre la branche
+#     à "upstream" (le template) et un simple `git push` pousserait dans le
+#     template. On force le suivi sur "origin" dès qu'il est configuré.
+current_branch="$(git branch --show-current)"
+if git remote get-url origin >/dev/null 2>&1; then
+  git config "branch.${current_branch}.remote" origin
+  git config "branch.${current_branch}.merge" "refs/heads/${current_branch}"
+  echo "→ la branche ${current_branch} suit désormais votre dépôt privé (origin)"
+fi
 
 # 4) Profil personnel à partir de l'exemple (sans écraser un profil existant).
 if [ -e information/profil.md ]; then
